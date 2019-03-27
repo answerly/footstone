@@ -1,0 +1,52 @@
+server:
+  port: 8080
+eureka:
+  client:
+    service-url.defaultZone: http://localhost:8080/eureka
+    fetch-registry: false
+    register-with-eureka: false
+  instance:
+    hostname: ${spring.cloud.client.ip-address}
+    preferIpAddress: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+  dashboard:
+    enabled: true
+    path: /system/eureka
+spring:
+  jackson:
+    dateFormat: yyyy-MM-dd HH:mm:ss
+  ldap:
+    urls: ldap://localhost:3268
+    base: DC=olafuwu,DC=com
+    username: App_PassFootstone
+    password: 1rQ2@VtsTBfCQ1CKHHVxxWMmp!nkNlvK
+  profiles:
+    active: jdbc
+  application:
+    name: pass-footstone
+  cloud:
+    config:
+      server:
+        prefix: /sdk/properties
+        jdbc:
+          sql: SELECT `KEY`, `VALUE` FROM app_properties WHERE app_name=? AND PROFILE=? and LABEL=? AND `state` = 1
+  datasource:
+    url: jdbc:mysql://localhost:3306/pass_footstone?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: olasharing
+    password: P@aL1BbTtGv9gaeD
+    driver-class-name: com.mysql.jdbc.Driver
+  redis:
+    host: localhost
+    port: 6379
+mybatis:
+  config-location: classpath:mybatis-config.xml
+
+pass:
+  login:
+    password: 1
+    timeout: 30
+  discovery:
+    key: eureka.client.service-url.defaultZone
+  gitlab:
+    hostUrl: https://gitlab.olafuwu.com
+    privateAccessToken: 5xxWqyzzNdCPxGnCYCXY

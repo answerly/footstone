@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.olasharing.footstone.repository.mapper.AdminDataExecMapper">
+
+    <sql id="BaseTableName">
+        admin_data_exec
+    </sql>
+
+    <sql id="BaseColumnList">
+        id, exec_desc, exec_state, app_name, app_show_name, datasource_id, `profile`, exec_type, exec_num, exec_script, exec_result,
+        create_username, exec_username, gmt_create, gmt_modified, create_display_name, exec_display_name
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.olasharing.footstone.repository.domain.AdminDataExec">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result property="execDesc" column="exec_desc" jdbcType="VARCHAR"/>
+        <result property="execState" column="exec_state" jdbcType="INTEGER"/>
+        <result property="appName" column="app_name" jdbcType="VARCHAR"/>
+        <result property="appShowName" column="app_show_name" jdbcType="VARCHAR"/>
+        <result property="datasourceId" column="datasource_id" jdbcType="VARCHAR"/>
+        <result property="profile" column="profile" jdbcType="VARCHAR"/>
+        <result property="execType" column="exec_type" jdbcType="VARCHAR"/>
+        <result property="execNum" column="exec_num" jdbcType="INTEGER"/>
+        <result property="execScript" column="exec_script" jdbcType="VARCHAR"/>
+        <result property="execResult" column="exec_result" jdbcType="VARCHAR"/>
+        <result property="createUsername" column="create_username" jdbcType="VARCHAR"/>
+        <result property="execUsername" column="exec_username" jdbcType="VARCHAR"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="createDisplayName" column="create_display_name" jdbcType="VARCHAR"/>
+        <result property="execDisplayName" column="exec_display_name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.olasharing.footstone.repository.domain.AdminDataExec">
+        INSERT INTO
+        <include refid="BaseTableName"/>
+        (<include refid="BaseColumnList"/>)
+        VALUES
+        (NULL,
+        #{execDesc, jdbcType=VARCHAR},
+        #{execState, jdbcType=INTEGER},
+        #{appName, jdbcType=VARCHAR},
+        #{appShowName, jdbcType=VARCHAR},
+        #{datasourceId, jdbcType=VARCHAR},
+        #{profile, jdbcType=VARCHAR},
+        #{execType, jdbcType=VARCHAR},
+        #{execNum,  jdbcType=INTEGER},
+        #{execScript, jdbcType=VARCHAR},
+        #{execResult,  jdbcType=VARCHAR},
+        #{createUsername,  jdbcType=VARCHAR},
+        #{execUsername, jdbcType=VARCHAR},
+        #{gmtCreate, jdbcType=TIMESTAMP},
+        #{gmtModified, jdbcType=TIMESTAMP},
+        #{createDisplayName,  jdbcType=VARCHAR},
+        #{execDisplayName, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="selectOneByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        WHERE id = #{id, jdbcType=INTEGER} LIMIT 1
+    </select>
+
+    <select id="selectListBySelective" resultMap="BaseResultMap"
+            parameterType="com.olasharing.footstone.repository.domain.AdminDataExec">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        <where>
+            <if test="execUsername != null">
+                AND exec_username = #{execUsername, jdbcType=VARCHAR}
+            </if>
+            <if test="createUsername != null">
+                AND create_username = #{createUsername, jdbcType=VARCHAR}
+            </if>
+            <if test="execState != null">
+                AND exec_state = #{execState, jdbcType=INTEGER}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateStateByPrimaryKey">
+        UPDATE
+        <include refid="BaseTableName"/>
+        SET exec_state = #{newState, jdbcType=INTEGER}
+        WHERE id = #{id, jdbcType=INTEGER} AND exec_state = #{oldState, jdbcType=INTEGER}
+    </update>
+
+    <update id="updateResultByPrimaryKey">
+        UPDATE
+        <include refid="BaseTableName"/>
+        SET exec_result = #{execResult, jdbcType=VARCHAR}, exec_state = #{newState, jdbcType=INTEGER}, gmt_modified = NOW()
+        WHERE id = #{id, jdbcType=INTEGER}
+    </update>
+</mapper>

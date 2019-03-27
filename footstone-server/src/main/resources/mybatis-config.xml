@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <typeAliases>
+        <package name="com.olasharing.footstone.repository.domain"/>
+    </typeAliases>
+
+    <mappers>
+        <mapper resource="mybatis/mapper/AppConfigMapper.xml"/>
+        <mapper resource="mybatis/mapper/AppPropertiesMapper.xml"/>
+        <mapper resource="mybatis/mapper/AppDataSourceMapper.xml"/>
+        <mapper resource="mybatis/mapper/ProjectIterationMapper.xml"/>
+        <mapper resource="mybatis/mapper/AdminUserRoleMapper.xml"/>
+        <mapper resource="mybatis/mapper/AdminRoleMenuMapper.xml"/>
+        <mapper resource="mybatis/mapper/AdminMenuMapper.xml"/>
+        <mapper resource="mybatis/mapper/AdminTagMapper.xml"/>
+        <mapper resource="mybatis/mapper/AdminDataExecMapper.xml"/>
+    </mappers>
+
+</configuration>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.olasharing.footstone.repository.mapper.AdminUserRoleMapper">
+
+    <sql id="BaseTableName">
+        admin_user_role
+    </sql>
+
+    <sql id="BaseColumnList">
+        id, username, role_code, gmt_modified
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.olasharing.footstone.repository.domain.AdminUserRole">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="roleCode" column="role_code" jdbcType="VARCHAR"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.olasharing.footstone.repository.domain.AdminUserRole">
+        INSERT INTO
+        <include refid="BaseTableName"/>
+        (<include refid="BaseColumnList"/>)
+        VALUES
+        (NULL,
+        #{username,jdbcType=VARCHAR},
+        #{roleCode,jdbcType=INTEGER},
+        #{gmtModified,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="getUserRoles" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        WHERE username = #{username,jdbcType=VARCHAR}
+    </select>
+</mapper>

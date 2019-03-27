@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.olasharing.footstone.repository.mapper.AppConfigMapper">
+
+    <sql id="BaseTableName">
+        app_config
+    </sql>
+
+    <sql id="BaseColumnList">
+        id, app_name, show_name, app_type, username, display_name, rep_group, rep_name, gmt_modified
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.olasharing.footstone.repository.domain.AppConfig">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result property="appName" column="app_name" jdbcType="VARCHAR"/>
+        <result property="showName" column="show_name" jdbcType="VARCHAR"/>
+        <result property="appType" column="app_type" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="displayName" column="display_name" jdbcType="VARCHAR"/>
+        <result property="repGroup" column="rep_group" jdbcType="VARCHAR"/>
+        <result property="repName" column="rep_name" jdbcType="VARCHAR"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.olasharing.footstone.repository.domain.AppConfig">
+        INSERT INTO
+        <include refid="BaseTableName"/>
+        (<include refid="BaseColumnList"/>)
+        VALUES
+        (NULL,
+        #{appName,jdbcType=VARCHAR},
+        #{showName,jdbcType=VARCHAR},
+        #{appType,jdbcType=INTEGER},
+        #{username,jdbcType=VARCHAR},
+        #{displayName,jdbcType=VARCHAR},
+        #{repGroup,jdbcType=VARCHAR},
+        #{repName,jdbcType=VARCHAR},
+        #{gmtModified,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="selectOneByName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        WHERE app_name = #{appName,jdbcType=VARCHAR} LIMIT 1
+    </select>
+
+    <select id="selectListLikeName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        <where>
+            <if test="appName != null">
+                AND app_name like CONCAT('%',#{appName,jdbcType=VARCHAR},'%')
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOneByUpperName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        WHERE UPPER(app_name) = #{appName,jdbcType=VARCHAR} LIMIT 1
+    </select>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.olasharing.footstone.repository.mapper.ProjectIterationMapper">
+
+    <sql id="BaseTableName">
+        project_iteration
+    </sql>
+
+    <sql id="BaseColumnList">
+        id, `name`, app_name, app_show_name, branch_name, `stage`, gmt_create
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.olasharing.footstone.repository.domain.ProjectIteration">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="appName" column="app_name" jdbcType="VARCHAR"/>
+        <result property="appShowName" column="app_show_name" jdbcType="VARCHAR"/>
+        <result property="branchName" column="branch_name" jdbcType="VARCHAR"/>
+        <result property="stage" column="stage" jdbcType="INTEGER"/>
+        <result property="gmtCreate" column="gmt_create" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.olasharing.footstone.repository.domain.ProjectIteration">
+        INSERT INTO
+        <include refid="BaseTableName"/>
+        (<include refid="BaseColumnList"/>)
+        VALUES
+        (NULL,
+        #{name,jdbcType=VARCHAR},
+        #{appName,jdbcType=VARCHAR},
+        #{appShowName,jdbcType=VARCHAR},
+        #{branchName,jdbcType=VARCHAR},
+        #{stage,jdbcType=INTEGER},
+        #{gmtCreate,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <select id="selectListByAppName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        <where>
+            <if test="appName != null">
+                AND app_name = #{appName,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectOneById" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <update id="updateStageByIdAndSource">
+        UPDATE
+        <include refid="BaseTableName"/>
+        SET `stage` = #{targetStage, jdbcType=INTEGER}
+        WHERE id = #{id, jdbcType=INTEGER} AND `stage` = #{sourceStage, jdbcType=INTEGER}
+    </update>
+
+</mapper>

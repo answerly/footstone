@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.olasharing.footstone.repository.mapper.AdminTagMapper">
+
+    <sql id="BaseTableName">
+        admin_tag
+    </sql>
+
+    <sql id="BaseColumnList">
+        id, tag_type, tag_ref, tag_code, tag_value, gmt_modified
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.olasharing.footstone.repository.domain.AdminTag">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result property="tagType" column="tag_type" jdbcType="VARCHAR"/>
+        <result property="tagRef" column="tag_ref" jdbcType="VARCHAR"/>
+        <result property="tagCode" column="tag_code" jdbcType="VARCHAR"/>
+        <result property="tagValue" column="tag_value" jdbcType="VARCHAR"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <insert id="insert">
+        INSERT INTO
+        <include refid="BaseTableName"/>
+        (<include refid="BaseColumnList"/>)
+        VALUES
+        <foreach collection="adminTagList" item="item" separator=",">
+            (NULL,
+            #{item.tagType,jdbcType=VARCHAR},
+            #{item.tagRef,jdbcType=VARCHAR},
+            #{item.tagCode,jdbcType=VARCHAR},
+            #{item.tagValue,jdbcType=VARCHAR},
+            NOW()
+            )
+        </foreach>
+    </insert>
+    <select id="selectListByRef" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        WHERE `tag_type` = #{tagType, jdbcType=VARCHAR}
+        AND `tag_ref` = #{tagRef, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectOneByCode" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        WHERE `tag_type` = #{tagType, jdbcType=VARCHAR}
+        AND `tag_ref` = #{tagRef, jdbcType=VARCHAR}
+        AND `tag_code` = #{tagCode, jdbcType=VARCHAR} LIMIT 1
+    </select>
+</mapper>

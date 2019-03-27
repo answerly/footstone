@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.olasharing.footstone.repository.mapper.AppDataSourceMapper">
+
+    <sql id="BaseTableName">
+        app_datasource
+    </sql>
+
+    <sql id="BaseColumnList">
+        id, app_name, app_show_name, datasource_id, `url`, `username`, `password`, driver_class_name, gmt_modified, `profile`, default_flag
+    </sql>
+
+    <resultMap id="BaseResultMap" type="com.olasharing.footstone.repository.domain.AppDataSource">
+        <id column="id" property="id" jdbcType="INTEGER"></id>
+        <result property="appName" column="app_name" jdbcType="VARCHAR"/>
+        <result property="appShowName" column="app_show_name" jdbcType="VARCHAR"/>
+        <result property="dataSourceId" column="datasource_id" jdbcType="VARCHAR"/>
+        <result property="url" column="url" jdbcType="VARCHAR"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="driverClassName" column="driver_class_name" jdbcType="VARCHAR"/>
+        <result property="gmtModified" column="gmt_modified" jdbcType="TIMESTAMP"/>
+        <result property="defaultFlag" column="default_flag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.olasharing.footstone.repository.domain.AppDataSource">
+        INSERT INTO
+        <include refid="BaseTableName"/>
+        (<include refid="BaseColumnList"/>)
+        VALUES
+        (NULL,
+        #{appName, jdbcType=VARCHAR},
+        #{appShowName,jdbcType=VARCHAR},
+        #{dataSourceId, jdbcType=VARCHAR},
+        #{url, jdbcType=VARCHAR},
+        #{username, jdbcType=VARCHAR},
+        #{password, jdbcType=VARCHAR},
+        #{driverClassName, jdbcType=VARCHAR},
+        #{gmtModified, jdbcType=TIMESTAMP},
+        #{profile, jdbcType=VARCHAR},
+        #{defaultFlag, jdbcType=INTEGER}
+        )
+    </insert>
+
+    <select id="selectListByAppName" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        <where>
+            <if test="appName != null and appName != ''">
+                AND app_name = #{appName, jdbcType=VARCHAR}
+            </if>
+            <if test="profiles != null and profiles.size != 0">
+                AND `profile` IN
+                <foreach collection="profiles" open="(" close=")" separator="," item="item">
+                    #{item, jdbcType=VARCHAR}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <update id="updateByPrimaryKey" parameterType="com.olasharing.footstone.repository.domain.AppDataSource">
+        UPDATE
+        <include refid="BaseTableName"/>
+        <set>
+            <if test="url != null">
+                `url` = #{url, jdbcType=VARCHAR},
+            </if>
+            <if test="username != null">
+                `username` = #{username, jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                `password` = #{password, jdbcType=VARCHAR},
+            </if>
+            <if test="driverClassName != null">
+                `driver_class_name` = #{driverClassName, jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id, jdbcType=INTEGER}
+        AND app_name = #{appName, jdbcType=VARCHAR}
+        AND datasource_id = #{dataSourceId, jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        WHERE id = #{id, jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByUniqueKey" resultMap="BaseResultMap"
+            parameterType="com.olasharing.footstone.repository.domain.AppDataSource">
+        SELECT
+        <include refid="BaseColumnList"/>
+        FROM
+        <include refid="BaseTableName"/>
+        WHERE app_name = #{appName, jdbcType=VARCHAR}
+        AND `profile` = #{profile, jdbcType=VARCHAR}
+        AND datasource_id = #{dataSourceId, jdbcType=VARCHAR}
+    </select>
+
+</mapper>
